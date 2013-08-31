@@ -1,6 +1,5 @@
 
 var assert = require('assert');
-var _ = require('underscore');
 
 var utils = require('./utils');
 var RRule = require('../');
