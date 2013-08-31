@@ -1,4 +1,11 @@
 
+var assert = require('assert');
+
+var RRule = require('../');
+var config = require('./config');
+
+var equal = assert.equal;
+
 /**
  * datetime.date/datetime.datetime
  */
@@ -56,7 +63,6 @@ var assertDatesEqual = function(actual, expected, msg) {
 
 
 var testRecurring = function(msg, rruleOrObj, expectedDates) {
-    console.log(msg)
     var rrule, method, args;
 
     if (rruleOrObj instanceof RRule) {
@@ -70,10 +76,7 @@ var testRecurring = function(msg, rruleOrObj, expectedDates) {
     }
 
     // Use text and string representation of the rrule as the message.
-    msg = msg + ' [' +
-          (rrule.isFullyConvertibleToText() ? rrule.toText() : 'no text repr') +
-          ']' +
-          ' ['  + rrule.toString() + ']';
+    msg = msg + ' [' + rrule.toString() + ']';
 
     test(msg, function() {
 
@@ -88,7 +91,7 @@ var testRecurring = function(msg, rruleOrObj, expectedDates) {
         // Additional tests using the expected dates
         // ==========================================================
 
-        if (this.ALSO_TEST_STRING_FUNCTIONS) {
+        if (config.ALSO_TEST_STRING_FUNCTIONS) {
             // Test toString()/fromString()
             var string = rrule.toString();
             var rrule2 = RRule.fromString(string, rrule.options.dtstart);
@@ -105,24 +108,7 @@ var testRecurring = function(msg, rruleOrObj, expectedDates) {
 
         }
 
-
-        if (this.ALSO_TEST_NLP_FUNCTIONS && rrule.isFullyConvertibleToText()) {
-            // Test fromText()/toText().
-            var text = rrule.toText();
-            var rrule2 = RRule.fromText(text, rrule.options.dtstart);
-            var text2 = rrule2.toText();
-            equal(text2, text, 'toText() == fromText(toText()).toText()');
-
-            // Test fromText()/toString().
-            var text = rrule.toText();
-            var rrule3 = RRule.fromText(text, rrule.options.dtstart);
-            var string3 = rrule2.toString();
-            equal(string3, string,
-                'toString() == fromText(toText()).toString()');
-        }
-
-
-        if (method == 'all' && this.ALSO_TEST_BEFORE_AFTER_BETWEEN) {
+        if (method == 'all' && config.ALSO_TEST_BEFORE_AFTER_BETWEEN) {
 
             // Test before, after, and between - use the expected dates.
 
@@ -180,3 +166,8 @@ var testRecurring = function(msg, rruleOrObj, expectedDates) {
 
     });
 };
+
+module.exports.testRecurring = testRecurring;
+module.exports.parse = parse;
+module.exports.datetime = datetime;
+module.exports.date = date;

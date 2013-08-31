@@ -10,6 +10,9 @@
         "icalendar",
         "rfc"
     ],
+    "scripts": {
+        "test": "mocha --reporter list --ui tdd tests/tests.js"
+    },
     "author": "Jakub Roztocil and Lars Schöning",
     "main": "lib/rrule",
     "repository" :{

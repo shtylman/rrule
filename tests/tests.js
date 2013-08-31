@@ -1,71 +1,27 @@
 
-module("RRule", {
+var assert = require('assert');
+var _ = require('underscore');
 
-    setup: function() {
+var utils = require('./utils');
+var RRule = require('../');
 
-        // Enable additional toString() / fromString() tests
-        //for each testRecurring().
-        this.ALSO_TEST_STRING_FUNCTIONS = true;
+var testRecurring = utils.testRecurring;
+var parse = utils.parse;
+var datetime = utils.datetime;
+var date = utils.date;
 
-        // Enable additional toText() / fromText() tests
-        // for each testRecurring().
-        // Many of the tests fail because the conversion is only approximate,
-        // but it gives an idea about how well or bad it converts.
-        this.ALSO_TEST_NLP_FUNCTIONS = false;
-
-        // Thorough after()/before()/between() tests.
-        // NOTE: can take a longer time.
-        this.ALSO_TEST_BEFORE_AFTER_BETWEEN = true;
-
-    }
-
-});
-
-
-var texts = [
-    ['Every week on Tuesday', 'FREQ=WEEKLY;BYDAY=TU'],
-    ['Every week on Monday, Wednesday', 'FREQ=WEEKLY;BYDAY=MO,WE'],
-    ['Every weekday', 'FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR'],
-    ['Every day', 'FREQ=DAILY'],
-    ['Every week', 'FREQ=WEEKLY'],
-    ['Every 2 weeks', 'FREQ=WEEKLY;INTERVAL=2'],
-    ['Every month', 'FREQ=MONTHLY'],
-    ['Every 6 months', 'FREQ=MONTHLY;INTERVAL=6'],
-    ['Every year', 'FREQ=YEARLY'],
-    ['Every month on the 4th', 'FREQ=MONTHLY;BYMONTHDAY=4'],
-    ['Every month on the 4th last', 'FREQ=MONTHLY;BYMONTHDAY=-4'],
-    ['Every month on the 3rd Tuesday', 'FREQ=MONTHLY;BYDAY=+3TU'],
-    ['Every month on the 3rd last Tuesday', 'FREQ=MONTHLY;BYDAY=-3TU'],
-    ['Every month on the last Monday', 'FREQ=MONTHLY;BYDAY=-1MO'],
-    ['Every month on the 2nd last Friday', 'FREQ=MONTHLY;BYDAY=-2FR'],
-    // This one will fail.
-    // The text date should be treated as a floating one, but toString
-    // always returns UTC dates.
-    // ['Every week until January 1, 2007', 'FREQ=WEEKLY;UNTIL=20070101T000000Z'],
-    ['Every week for 20 times', 'FREQ=WEEKLY;COUNT=20']
-];
-test('fromText()', function() {
-    $.each(texts, function(){
-        var text = this[0],
-            string = this[1];
-        console.log(text, string)
-        equal(RRule.fromText(text).toString(), string,
-            text + ' => ' + string);
-    });
-
-});
-
-
-strings = [
+var strings = [
     ['FREQ=WEEKLY;UNTIL=20100101T000000Z', 'FREQ=WEEKLY;UNTIL=20100101T000000Z'],
 
     // Parse also `date` but return `date-time`
     ['FREQ=WEEKLY;UNTIL=20100101', 'FREQ=WEEKLY;UNTIL=20100101T000000Z']
 ];
+
 test('fromString()', function() {
-    $.each(strings, function(){
-        var s = this[0], s2 = this[1];
-        equal(RRule.fromString(s).toString(), s2, s + ' => ' + s2);
+
+    strings.forEach(function(str) {
+        var s = str[0], s2 = str[1];
+        assert.equal(RRule.fromString(s).toString(), s2, s + ' => ' + s2);
     });
 
 });
