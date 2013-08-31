@@ -22,5 +22,17 @@
     "dependencies": {
         "xtend": "2.0.6",
         "intersect": "0.0.3"
+    },
+    "testling": {
+        "files": "tests/tests.js",
+        "browsers": [
+            "ie/8..latest",
+            "chrome/20..latest",
+            "firefox/3.6..latest",
+            "safari/5.0.5..latest",
+            "iphone/6",
+            "ipad/6"
+        ],
+        "harness": "mocha-tdd"
     }
 }
